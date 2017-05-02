@@ -1,0 +1,171 @@
+<uib-accordion>
+    <div
+        uib-accordion-group
+        class="panel-default"
+        heading="Customer information"
+        is-open="customer.open"
+    >
+        <form method="post" class="col-xs-12 col-sm-8">
+            <div
+                class="form-group col-xs-12 col-sm-6"
+                ng-class="customer.errors.firstname.length ? 'has-error' : ''"
+            >
+                <label for="firstname" class="col-xs-12">First name</label>
+                <input
+                    name="firstName"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="customer.details.firstname"
+                    ng-change="checkFormField('customer', 'firstname')"
+                />
+                <small
+                    class="ng-hide error-text col-xs-12"
+                    ng-show="customer.errors.firstname.length"
+                >
+                    {{ customer.errors.firstname }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-12 col-sm-6"
+                ng-class="customer.errors.lastname.length ? 'has-error' : ''"
+            >
+                <label for="lastname" class="col-xs-12">Last name</label>
+                <input
+                    name="lastName"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="customer.details.lastname"
+                    ng-change="checkFormField('customer', 'lastname')"
+                />
+                <small
+                    class="ng-hide error-text col-xs-12"
+                    ng-show="customer.errors.lastname.length"
+                >
+                    {{ customer.errors.lastname }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-12"
+            >
+                <button class="col-xs-12 btn btn-primary" ng-click="submitForm('customer')">Submit</button>
+            </div>
+        </form>
+
+    </div>
+    <div
+        uib-accordion-group
+        class="panel-default"
+        heading="Payment information"
+        is-open="credit_card.open"
+        is-disabled="! customer.is_valid"
+    >
+        <form method="post" class="col-xs-12 col-sm-8">
+            <div
+                class="form-group col-xs-12"
+                ng-class="credit_card.errors.card_holder.length ? 'has-error' : ''"
+            >
+                <label for="cardHolder" class="col-xs-12">Cardholder Name</label>
+                <input
+                    name="cardHolder"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="credit_card.details.card_holder"
+                    ng-change="checkFormField('credit_card', 'card_holder')"
+                />
+                <small
+                    class="ng-hide error-text col-sm-12"
+                    ng-show="credit_card.errors.card_holder.length"
+                >
+                    {{ credit_card.errors.card_holder }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-12"
+                ng-class="credit_card.errors.card_number.length ? 'has-error' : ''"
+            >
+                <label for="cardNumber" class="col-xs-12">Card Number</label>
+                <input
+                    name="cardNumber"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="credit_card.details.card_number"
+                    ng-change="checkFormField('credit_card', 'card_number')"
+                    ui-mask="9999 9999 9999 9999"
+                />
+                <small
+                    class="ng-hide error-text col-sm-12"
+                    ng-show="credit_card.errors.card_number.length"
+                >
+                    {{ credit_card.errors.card_number }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-6"
+                ng-class="credit_card.errors.expire_date.length ? 'has-error' : ''"
+            >
+                <label for="expireDate" class="col-xs-12">Expire Date</label>
+                <input
+                    name="expireDate"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="credit_card.details.expire_date"
+                    ng-change="checkFormField('credit_card', 'expire_date')"
+                    ui-mask="99/99"
+                    model-view-value="true"
+                />
+                <small
+                    class="ng-hide error-text col-sm-12"
+                    ng-show="credit_card.errors.expire_date.length"
+                >
+                    {{ credit_card.errors.expire_date }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-6"
+                ng-class="credit_card.errors.cvc.length ? 'has-error' : ''"
+            >
+                <label for="cvc" class="col-xs-12">CVC</label>
+                <input
+                    name="cvc"
+                    type="text"
+                    class="form-control col-xs-12"
+                    ng-model="credit_card.details.cvc"
+                    ng-change="checkFormField('credit_card', 'cvc')"
+                    ui-mask="999"
+                />
+                <small
+                    class="ng-hide error-text col-sm-12"
+                    ng-show="credit_card.errors.cvc.length"
+                >
+                    {{ credit_card.errors.cvc }}
+                </small>
+            </div>
+            <div
+                class="form-group col-xs-12"
+            >
+                <button class="col-xs-12 btn btn-primary" ng-click="submitForm('credit_card')">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div
+        uib-accordion-group
+        class="panel-default"
+        heading="Summary"
+        is-open="summary.open"
+        is-disabled="! customer.is_valid || ! credit_card.is_valid"
+    >
+        <div class="col-xs-4 strong">Customer:</div>
+        <div class="col-xs-8">{{ customer.details.firstname }} {{ customer.details.lastname }}</div>
+        <div class="col-xs-4 strong">Card Holder:</div>
+        <div class="col-xs-8">{{ credit_card.details.card_holder }}</div>
+        <div class="col-xs-4 strong">Card Number:</div>
+        <div class="col-xs-8">XXXX-XXXX-XXXX-{{ credit_card.details.card_number | limitTo:8:4 }}</div>
+        <div class="col-xs-4 strong">Card Expire:</div>
+        <div class="col-xs-8">{{ credit_card.details.expire_date }}</div>
+        <div
+            class="form-group col-xs-12"
+        >
+            <button class="col-xs-12 btn btn-warning" ng-click="initScope()">Reset</button>
+        </div>
+    </div>
+</uib-accordion>
